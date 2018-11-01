@@ -42,18 +42,6 @@ public class SftpService {
     @Value("${sftp.password}")
     private String sftpPassword;
 
-    @Value("${ssh.host}")
-    private String sshHost;
-
-    @Value("${ssh.port:22}")
-    private int sshPort;
-
-    @Value("${ssh.user}")
-    private String sshUser;
-
-    @Value("${ssh.password}")
-    private String sshPassword;
-
     /**
      * 单文件上传
      *
@@ -132,17 +120,16 @@ public class SftpService {
      * @return
      */
     public int deleteFileByShred(String cmds,String filePath) throws IOException {
-        //if (existFile(filePath)) {
-            SSHCommandExecutor tool = new SSHCommandExecutor(sshHost, sshUser,
-                    sshPassword, "utf-8",sshPort);
-            String result = tool.exec(cmds+filePath);
+        if (existFile(filePath)) {
+            SSHCommandExecutor tool = new SSHCommandExecutor(sftpHost, sftpUser,
+                    sftpPassword, "utf-8",sftpPort);
+            int result = tool.exec(cmds+filePath);
             String out = System.getProperty("user.dir");
-            //cmds = "rm -rf /data/sftp/mysftp/upload/demo08.png ";
-            return 0;
-        /*} else {
+            return result;
+        } else {
             //文件不存在
             return 400;
-        }*/
+        }
     }
 
     /**

@@ -37,22 +37,20 @@ public class SSHCommandExecutor {
         return conn.authenticateWithPassword(userName, password); // 认证
     }
 
-    public String exec(String cmds) {
+    public int exec(String cmds) {
         InputStream in = null;
         String result = "";
+        int res=-1;
         try {
             if (this.login()) {
-                Session session = conn.openSession(); // 打开一个会话
-                // 这句非常重要，开启远程的客户端
-                //session.requestPTY("vt100", 80, 24, 640, 480, null);
-                // 开启后睡眠4秒
-                cmds="rm -rf /home/zhangsheng/demo08.png";
+                Session session = conn.openSession();
                 session.execCommand(cmds);
-                //int res=session.getExitStatus();
-                InputStream is = new StreamGobbler(session.getStdout());//获得标准输出流
+                InputStream is = new StreamGobbler(session.getStdout());
                 InputStream stdout = new StreamGobbler(session.getStderr());
-                in = session.getStdout();
                 result = this.processStdout(stdout, this.charset);
+                if(result!=null && !result.equals("")){
+                    res=0;
+                }
                 session.close();
                 conn.close();
             }
@@ -60,7 +58,7 @@ public class SSHCommandExecutor {
             e1.printStackTrace();
             log.error("执行删除异常："+e1.getMessage()+e1.getStackTrace());
         }
-        return result;
+        return res;
     }
 
     public String processStdout(InputStream in, String charset) {
@@ -82,7 +80,7 @@ public class SSHCommandExecutor {
     public static void main(String[] args) {
         SSHCommandExecutor tool = new SSHCommandExecutor("192.168.27.41", "hadoop",
                 "hadoop", "utf-8",22);
-        String result = tool.exec("./test.sh xiaojun");
+        int result = tool.exec("./test.sh xiaojun");
         System.out.print(result);
     }
 }
