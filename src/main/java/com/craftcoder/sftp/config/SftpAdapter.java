@@ -24,7 +24,7 @@ public class SftpAdapter {
     @Value("${sftp.host}")
     private String sftpHost;
 
-    @Value("${sftp.port:822}")
+    @Value("${sftp.port:22}")
     private int sftpPort;
 
     @Value("${sftp.user}")

@@ -2,9 +2,11 @@ package com.craftcoder.sftp.service;
 
 import com.craftcoder.sftp.config.SftpAdapter;
 import com.craftcoder.sftp.util.FileUtils;
+import com.craftcoder.sftp.util.SSHCommandExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +29,30 @@ public class SftpService {
 
     @Autowired
     private SftpAdapter.UploadGateway gateway;
+
+    @Value("${sftp.host}")
+    private String sftpHost;
+
+    @Value("${sftp.port:22}")
+    private int sftpPort;
+
+    @Value("${sftp.user}")
+    private String sftpUser;
+
+    @Value("${sftp.password}")
+    private String sftpPassword;
+
+    @Value("${ssh.host}")
+    private String sshHost;
+
+    @Value("${ssh.port:22}")
+    private int sshPort;
+
+    @Value("${ssh.user}")
+    private String sshUser;
+
+    @Value("${ssh.password}")
+    private String sshPassword;
 
     /**
      * 单文件上传
@@ -101,6 +127,25 @@ public class SftpService {
     }
 
     /**
+     * shred混淆删除
+     * @param cmds
+     * @return
+     */
+    public int deleteFileByShred(String cmds,String filePath) throws IOException {
+        //if (existFile(filePath)) {
+            SSHCommandExecutor tool = new SSHCommandExecutor(sshHost, sshUser,
+                    sshPassword, "utf-8",sshPort);
+            String result = tool.exec(cmds+filePath);
+            String out = System.getProperty("user.dir");
+            //cmds = "rm -rf /data/sftp/mysftp/upload/demo08.png ";
+            return 0;
+        /*} else {
+            //文件不存在
+            return 400;
+        }*/
+    }
+
+    /**
      * 批量上传 (MultipartFile)
      *
      * @param files List<MultipartFile>
@@ -138,5 +183,4 @@ public class SftpService {
     public void uploadFile(MultipartFile multipartFile) throws IOException {
         gateway.upload(FileUtils.convert(multipartFile));
     }
-
 }
