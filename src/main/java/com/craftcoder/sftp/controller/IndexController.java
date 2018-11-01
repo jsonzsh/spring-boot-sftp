@@ -8,6 +8,11 @@ public class IndexController {
 
     @GetMapping("/")
     public String index() {
+        return "upload1";
+    }
+
+    @GetMapping("/uploadFiles")
+    public String upload() {
         return "upload";
     }
 
