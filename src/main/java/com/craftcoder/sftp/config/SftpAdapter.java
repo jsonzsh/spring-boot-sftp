@@ -42,7 +42,6 @@ public class SftpAdapter {
     @Value("${sftp.privateKeyPassPhrase:}")
     private String privateKeyPassPhrase;
 
-
     @Value("${sftp.remote.directory.download.filter:*.*}")
     private String sftpRemoteDirectoryDownloadFilter;
 

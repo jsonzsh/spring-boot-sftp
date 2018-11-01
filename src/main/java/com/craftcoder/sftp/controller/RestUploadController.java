@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,8 @@ public class RestUploadController {
     @Autowired
     private SftpService sftpService;
 
-    private static String dataDir="/data/sftp/mysftp/upload/";
+    @Value("${sftp.directory}")
+    private String dataDir;
 
     /**
      * 单个文件上传
