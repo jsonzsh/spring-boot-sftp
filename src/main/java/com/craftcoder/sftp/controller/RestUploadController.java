@@ -74,25 +74,19 @@ public class RestUploadController {
      * 附件删除
      * @param fileName 文件名称
      * @param response
-     * @return http://localhost:9001/api/upload/delete?fileName=icon180.png
+     * @return http://localhost:9001/api/delete?fileName=icon180.png
      */
-    @PostMapping("/api/upload/delete")
+    @PostMapping("/api/delete")
     public ResponseEntity<?> delete(String fileName, HttpServletResponse response) throws IOException {
         String path = dataDir + fileName;
         String shellCmd = "shred -zvu -n 5 ";
-        //int code=0;
-        //try {
         int code = sftpService.deleteFileByShred(shellCmd, path);
         //sftpService.deleteFile(path);
         if (0 != code) {
-            return new ResponseEntity<>(500, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(400, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(200, HttpStatus.OK);
         }
-       /* } catch (Throwable e) {
-            logger.info("delete file failed:"+e.getStackTrace());
-            return new ResponseEntity<>(500, HttpStatus.BAD_REQUEST);
-        }*/
     }
 
     //http://localhost:9001/api/download?fileName=timg.jpg
