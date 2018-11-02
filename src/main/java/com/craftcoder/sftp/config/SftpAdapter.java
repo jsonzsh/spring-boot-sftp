@@ -20,7 +20,6 @@ import java.io.File;
 
 @Configuration
 public class SftpAdapter {
-
     @Value("${sftp.host}")
     private String sftpHost;
 
