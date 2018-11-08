@@ -2,9 +2,6 @@ package com.craftcoder.sftp.config;
 
 import com.craftcoder.sftp.util.FileUtils;
 import com.craftcoder.sftp.util.HttpUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
